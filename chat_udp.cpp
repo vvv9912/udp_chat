@@ -1,19 +1,21 @@
 #include "chat_udp.h"
-#include "mainwindow.h"
-Chat_udp::Chat_udp(int _port)
+
+Chat_udp::Chat_udp()
 {
-    port = _port;
-    //repeat = 0;
-    if (udpSocket.bind(QHostAddress::LocalHost, port))
+
+    if (udpSocket.bind(QHostAddress::LocalHost, local_port))
     {
-        qInfo() << "Started on: "
-                << udpSocket.localAddress()
-                << ":"
-                << udpSocket.localPort();
-        connect(&udpSocket,&QUdpSocket::readyRead, this, &Chat_udp::ReadPendingDatagrams);
 
+       QObject::connect(&udpSocket,&QUdpSocket::readyRead, this, &Chat_udp::ReadPendingDatagrams);
+       /*  qInfo() << "Started on: "
+                 << udpSocket.localAddress()
+                 << ":"
+                 << udpSocket.localPort();*/
     }
-
+    else
+    {
+        Readmessage = "error";
+    }
 
 }
 
@@ -24,16 +26,14 @@ void Chat_udp::ReadPendingDatagrams()
         QNetworkDatagram datagram = udpSocket.receiveDatagram();
         Readmessage = QString(datagram.data());
        // qInfo() << datagram.data();
-        qInfo() << Readmessage;
-        //datagram.data()
-
+        emit messageRecived(Readmessage);
     }
 }
 
 void Chat_udp::Send(QString value)
 {
 QByteArray data = value.toLatin1();
-QNetworkDatagram datagram(data, QHostAddress::Broadcast, port);
+QNetworkDatagram datagram(data, QHostAddress::Broadcast, sent_port);
 udpSocket.writeDatagram(datagram); //добавить проверку на отправление
 
 }

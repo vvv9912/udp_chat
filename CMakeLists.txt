@@ -24,8 +24,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network Widgets REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Widgets REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -54,7 +54,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(udp_chat PRIVATE Qt${QT_VERSION_MAJOR}::Widgets  Qt5::Network)
+target_link_libraries(udp_chat PRIVATE Qt${QT_VERSION_MAJOR}::Widgets  Qt5::Core Qt5::Network)
 
 set_target_properties(udp_chat PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

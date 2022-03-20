@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -8,44 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
 
-
-}
-void MainWindow::ReadPendingDatagrams()
-{
-    while (udpSocket.hasPendingDatagrams())
-    {
-        QNetworkDatagram datagram = udpSocket.receiveDatagram();
-        // QString(datagram.data()); //in qstrig
-       // qInfo() << datagram.data();;
-        ui->textEdit->append(QString(datagram.data()));
-        //datagram.data()
-
-    }
-}
-
-void MainWindow::Send(QString value)
-{
-QByteArray data = value.toLatin1();
-QNetworkDatagram datagram(data, QHostAddress::Broadcast, sent_port);
-udpSocket.writeDatagram(datagram); //добавить проверку на отправление
+QObject::connect(&chat, SIGNAL(messageRecived),this, SLOT(onMessageRecvied));
 
 }
 
-void MainWindow::Process(QString value)
-{
-    QString message;
-    if (nickname.isEmpty())
-    {
-        nickname = value;
-        message = nickname + " is join";
-        Send(message);
-    }
-    else
-    {
-    message = nickname + ": " + value;
-    Send(message);
-    }
-}
 
 
 MainWindow::~MainWindow()
@@ -53,32 +20,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::onMessageRecvied(QString message)
+{
+ ui->textEdit->append(message);
+}
 
 void MainWindow::on_Send_clicked()
 {
-   QString text=ui->lineEdit->text().toUtf8();
-   Process(text);
+    QString text=ui->lineEdit->text().toUtf8();
+    chat.Process(text);
     ui->textEdit->append(QString("you: "+text));
+   /*QString text=ui->lineEdit->text().toUtf8();
+   Process(text);
+    ui->textEdit->append(QString("you: "+text));*/
 }
 
 
 void MainWindow::on_pushButton_clicked()
-{
-    local_port = ui->lineEdit_local->text().toInt();
-    sent_port = ui->lineEdit_ydal->text().toInt();
-    QString text = "you take port:" + QString::number(local_port);
-
-    if (udpSocket.bind(QHostAddress::LocalHost, local_port))
-    {
-
-        ui->textEdit->append(QString(text));
-      /*  qInfo() <<
-                << udpSocket.localAddress()
-                << ":"
-                << udpSocket.localPort();*/
-        connect(&udpSocket,&QUdpSocket::readyRead, this, &MainWindow::ReadPendingDatagrams);
+{   /*int local_port = ui->lineEdit_local->text().toInt();
+    int sent_port = ui->lineEdit_ydal->text().toInt();*/
+   chat.local_port = ui->lineEdit_local->text().toInt();
+   chat.sent_port = ui->lineEdit_ydal->text().toInt();
+    //QString text = "you take port:" + QString::number(chat.local_port);
+    QString text2 = "you take nickname:";
+    ui->textEdit->append(QString(text2));
+    /* QString text = "you take port:" + QString::number(local_port);
      QString text2 = "you take nickname:";
-     ui->textEdit->append(QString(text2));
-    }
+     ui->textEdit->append(QString(text2));*/
+
 }
+
 

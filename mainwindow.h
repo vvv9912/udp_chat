@@ -2,10 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <chat_udp.h>
 #include <QString>
 #include <QObject>
-#include <QUdpSocket>
-#include <QNetworkDatagram>
 #include <QByteArray>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,10 +17,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    Chat_udp chat;
 public slots:
-    void Process(QString value);
-    void Send(QString value);
-    void ReadPendingDatagrams();
+    void onMessageRecvied(QString message);
 private slots:
     void on_Send_clicked();
 
@@ -29,8 +27,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    int local_port;
-    int sent_port;
     QString nickname;
     QUdpSocket udpSocket;
 };

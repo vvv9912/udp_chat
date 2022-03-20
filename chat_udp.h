@@ -5,24 +5,27 @@
 #include <QUdpSocket>
 #include <QNetworkDatagram>
 #include <QByteArray>
+
 class Chat_udp : public QObject
 {
-
+    Q_OBJECT
 public:
-    Chat_udp(int _port);
+    Chat_udp();
     QString Readmessage;
-    int repeat = 0; //if 1 - errro
-
+    int local_port;
+    int sent_port;
 public slots:
     void Process(QString value);
     void Send(QString value);
     void ReadPendingDatagrams();
-
+signals:
+   void messageRecived(QString message);
 
 private:
-    int port;
+  //  int port;
     QString nickname;
     QUdpSocket udpSocket;
+
 };
 
 #endif // CHAT_UDP_H
