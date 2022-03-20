@@ -56,7 +56,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_Send_clicked()
 {
-   Process(ui->lineEdit->text().toUtf8());
+   QString text=ui->lineEdit->text().toUtf8();
+   Process(text);
+    ui->textEdit->append(QString("you: "+text));
 }
 
 
