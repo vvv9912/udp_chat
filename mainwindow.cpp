@@ -35,8 +35,7 @@ void MainWindow::on_Send_clicked()
 
 void MainWindow::on_pushButton_disconnect_clicked()
 { //либо как то по другому отключение работает, !чекнуть документацию!
-   // chat.local_port = 0;
-   // chat.sent_port = 0;
+
    clicked = 1;
    emit DisconnectClicked(clicked);
    clicked = 0;
@@ -47,12 +46,7 @@ void MainWindow::on_pushButton_connect_clicked()
 {
       local_port = ui->lineEdit_local->text().toInt();
       sent_port = ui->lineEdit_ydal->text().toInt();
-      QString text2 = "you take nickname:";
-      ui->textEdit->append(QString(text2));
-
       emit ConnectClicked(local_port,sent_port);
-       /* QString text = "you take port:" + QString::number(local_port);
-        QString text2 = "you take nickname:";
-        ui->textEdit->append(QString(text2));*/
+
 }
 
