@@ -34,6 +34,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
         chat_udp.cpp
         chat_udp.h
+        core.h core.cpp
 
 )
 

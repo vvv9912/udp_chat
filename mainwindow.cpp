@@ -7,10 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-
-QObject::connect(&chat, SIGNAL(messageRecived),this, SLOT(onMessageRecvied));
-
+//QObject::connect(&chat, &Chat_udp::messageRecived,this, &MainWindow::onMessageRecvied);
 }
 
 
@@ -23,31 +20,49 @@ MainWindow::~MainWindow()
 void MainWindow::onMessageRecvied(QString message)
 {
  ui->textEdit->append(message);
+
 }
 
 void MainWindow::on_Send_clicked()
 {
-    QString text=ui->lineEdit->text().toUtf8();
-    chat.Process(text);
+    QString text=QString::fromUtf8(ui->lineEdit->text().toUtf8());
+    //chat.Process(text);
     ui->textEdit->append(QString("you: "+text));
-   /*QString text=ui->lineEdit->text().toUtf8();
-   Process(text);
-    ui->textEdit->append(QString("you: "+text));*/
+   //
+    emit SendClicked(text);
+
 }
 
 
 void MainWindow::on_pushButton_clicked()
-{   /*int local_port = ui->lineEdit_local->text().toInt();
-    int sent_port = ui->lineEdit_ydal->text().toInt();*/
-   chat.local_port = ui->lineEdit_local->text().toInt();
-   chat.sent_port = ui->lineEdit_ydal->text().toInt();
-    //QString text = "you take port:" + QString::number(chat.local_port);
-    QString text2 = "you take nickname:";
-    ui->textEdit->append(QString(text2));
-    /* QString text = "you take port:" + QString::number(local_port);
-     QString text2 = "you take nickname:";
-     ui->textEdit->append(QString(text2));*/
+{
 
 }
 
+
+
+void MainWindow::on_pushButton_disconnect_clicked()
+{ //либо как то по другому отключение работает, !чекнуть документацию!
+   // chat.local_port = 0;
+   // chat.sent_port = 0;
+}
+
+
+void MainWindow::on_pushButton_connect_clicked()
+{
+    /*int local_port = ui->lineEdit_local->text().toInt();
+       int sent_port = ui->lineEdit_ydal->text().toInt();*/
+     // chat.local_port = ui->lineEdit_local->text().toInt();
+     // chat.sent_port = ui->lineEdit_ydal->text().toInt();
+      local_port = ui->lineEdit_local->text().toInt();
+      sent_port = ui->lineEdit_ydal->text().toInt();
+     // chat.connectserver();
+      QString text2 = "you take nickname:";
+      ui->textEdit->append(QString(text2));
+
+      emit ConnectClicked(local_port,sent_port);
+       /* QString text = "you take port:" + QString::number(local_port);
+        QString text2 = "you take nickname:";
+        ui->textEdit->append(QString(text2));*/
+}
 

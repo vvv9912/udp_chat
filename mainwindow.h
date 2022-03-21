@@ -17,7 +17,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    Chat_udp chat;
 public slots:
     void onMessageRecvied(QString message);
 private slots:
@@ -25,7 +24,18 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_disconnect_clicked();
+
+    void on_pushButton_connect_clicked();
+signals:
+
+    void SendClicked(QString text);
+
+    void ConnectClicked(int local_port_, int sent_port_);
+
 private:
+    int local_port;
+    int sent_port;
     Ui::MainWindow *ui;
     QString nickname;
     QUdpSocket udpSocket;
