@@ -15,6 +15,7 @@ public:
 public slots:
        void onSendClicked(QString text);
        void onConnectClicked(int local_port_, int sent_port_);
+       void onDisconnectClicked(int i);
 signals:
 
 };

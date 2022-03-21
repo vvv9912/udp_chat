@@ -8,9 +8,12 @@ Chat_udp::Chat_udp()
 }
 void Chat_udp::connectserver()
 {
+    udpSocket.abort();
     udpSocket.bind(QHostAddress::LocalHost, local_port);
     qDebug()<<udpSocket.localPort();
-    qDebug()<<local_port;
+    qDebug()<<udpSocket.peerPort();
+    //qDebug()<<local_port;
+    qDebug()<<QString(udpSocket.localPort());
 }
 void Chat_udp::ReadPendingDatagrams()
 {
@@ -24,9 +27,12 @@ void Chat_udp::ReadPendingDatagrams()
 
 void Chat_udp::Send(QString value)
 {
+
     QByteArray data = value.toLatin1();
     QNetworkDatagram datagram(data, QHostAddress::Broadcast, sent_port);
     udpSocket.writeDatagram(datagram); //добавить проверку на отправление
+    qDebug()<<datagram.destinationAddress();
+    qDebug()<<datagram.destinationPort();
 }
 
 void Chat_udp::Process(QString value)
@@ -43,4 +49,8 @@ void Chat_udp::Process(QString value)
         message = nickname + ": " + value;
         Send(message);
     }
+}
+void Chat_udp::disc()
+{
+    udpSocket.abort();
 }

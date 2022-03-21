@@ -22,8 +22,6 @@ public slots:
 private slots:
     void on_Send_clicked();
 
-    void on_pushButton_clicked();
-
     void on_pushButton_disconnect_clicked();
 
     void on_pushButton_connect_clicked();
@@ -33,11 +31,14 @@ signals:
 
     void ConnectClicked(int local_port_, int sent_port_);
 
+    void DisconnectClicked(int i);
+
 private:
     int local_port;
     int sent_port;
     Ui::MainWindow *ui;
     QString nickname;
     QUdpSocket udpSocket;
+    int clicked;
 };
 #endif // MAINWINDOW_H
