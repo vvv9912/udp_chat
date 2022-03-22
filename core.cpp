@@ -2,17 +2,18 @@
 
 core::core(QObject *parent) : QObject(parent)
 {
+    w.show();
 
     chat->moveToThread(&chatthread);
-
     connect(&chatthread, &QThread::started, chat,&Chat_udp::connectserver);
-    w.show();
+
     connect(chat, &Chat_udp::messageRecived,&w, &MainWindow::onMessageRecvied);
     connect(&w, &MainWindow::SendClicked, this, &core::onSendClicked);
     connect(&w, &MainWindow::ConnectClicked, this, &core::onConnectClicked);
     connect(&w, &MainWindow::DisconnectClicked, this, &core::onDisconnectClicked);
+
     connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::terminate);
-    connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::deleteLater);
+    //connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::deleteLater);
 }
 
 void core::onSendClicked(QString text)
