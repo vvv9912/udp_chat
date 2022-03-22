@@ -12,7 +12,7 @@ class Chat_udp : public QObject
 public:
     Chat_udp();
     QString Readmessage;
-    void connectserver();
+
     int local_port;
     int sent_port;
     void disc();
@@ -21,6 +21,7 @@ public slots:
     void Process(QString value);
     void Send(QString value);
     void ReadPendingDatagrams();
+    void connectserver();
 signals:
     void messageRecived(QString message);
 
