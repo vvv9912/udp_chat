@@ -25,8 +25,9 @@ void MainWindow::onMessageRecvied(QString message)
 
 void MainWindow::on_Send_clicked()
 {
-    QString text=QString::fromUtf8(ui->lineEdit->text().toUtf8());
+    QString text(ui->lineEdit->text().toUtf8());
     ui->textEdit->append(QString("you: "+text));
+    qDebug()<<"test1"<<text;
     emit SendClicked(text);
 
 }
