@@ -12,7 +12,7 @@ core::core(QObject *parent) : QObject(parent)
     connect(&w, &MainWindow::ConnectClicked, this, &core::onConnectClicked);
     connect(&w, &MainWindow::DisconnectClicked, this, &core::onDisconnectClicked);
     connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::terminate);
-
+    connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::deleteLater);
 }
 
 void core::onSendClicked(QString text)
