@@ -1,6 +1,4 @@
 #include "chat_udp.h"
-#include <thread>
-#include <iostream>
 
 ChatUdp::ChatUdp()
 {

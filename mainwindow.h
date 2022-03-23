@@ -5,7 +5,6 @@
 #include <chat_udp.h>
 #include <QString>
 #include <QObject>
-#include <QByteArray>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

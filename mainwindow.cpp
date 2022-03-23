@@ -1,9 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <thread>
-#include <iostream>
-#include <QTextStream>
-#include <QTextCodec>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
