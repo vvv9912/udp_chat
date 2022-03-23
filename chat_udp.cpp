@@ -1,45 +1,47 @@
 #include "chat_udp.h"
+#include <thread>
+#include <iostream>
 
-Chat_udp::Chat_udp()
+ChatUdp::ChatUdp()
 {
-    QObject::connect(&udpSocket,&QUdpSocket::readyRead, this, &Chat_udp::ReadPendingDatagrams);
-
-
-}
-void Chat_udp::connectserver()
-{
-    udpSocket.abort();
-    udpSocket.bind(QHostAddress::LocalHost, local_port);
-
-}
-void Chat_udp::ReadPendingDatagrams()
-{
-    while (udpSocket.hasPendingDatagrams())
-    {
-        QNetworkDatagram datagram = udpSocket.receiveDatagram();
-        Readmessage = QString::fromUtf8(datagram.data());
-        emit messageRecived(Readmessage);
-    }
+    QObject::connect(&_udpSocket, &QUdpSocket::readyRead, this, &ChatUdp::readPendingDatagrams);
 }
 
-void Chat_udp::Send(QString value)
+void ChatUdp::connect(int srcPort, int destPort)
 {
-
-
-    QByteArray data = value.toUtf8();
-    QNetworkDatagram datagram(data, QHostAddress::Broadcast, sent_port);
-    udpSocket.writeDatagram(datagram); //добавить проверку на отправление
+    _srcPort = srcPort;
+    _destPort = destPort;
+    _udpSocket.abort();
+    _udpSocket.bind(QHostAddress::LocalHost, srcPort);
+    _udpSocket.connectToHost(QHostAddress::LocalHost, destPort);
 }
 
-void Chat_udp::Process(QString value)
+void ChatUdp::disconnect()
+{
+    _udpSocket.abort();
+    _udpSocket.disconnectFromHost();
+}
+
+void ChatUdp::readPendingDatagrams()
 {
     QString message;
-    nickname = "from "+QString::number(udpSocket.localPort());
-    message = nickname + ": " + value;
-    Send(message);
+    while (_udpSocket.hasPendingDatagrams())
+    {
+        QNetworkDatagram datagram = _udpSocket.receiveDatagram();
+        message += QString::fromUtf8(datagram.data());
+    }
+    emit messageRecived(message);
+}
 
-}
-void Chat_udp::disc()
+void ChatUdp::send(QString value)
 {
-    udpSocket.abort();
+    value = "from "+QString::number(_udpSocket.localPort())+": "+value;
+    QByteArray data = value.toUtf8();
+    QNetworkDatagram datagram(data, QHostAddress::LocalHost, _destPort);
+    _udpSocket.writeDatagram(datagram);
 }
+
+
+
+
+

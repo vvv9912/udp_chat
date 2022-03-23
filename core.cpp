@@ -1,38 +1,25 @@
 #include "core.h"
 
-core::core(QObject *parent) : QObject(parent)
+Core::Core(QObject *parent) : QObject(parent),
+    window(new MainWindow()),
+    chat(new ChatUdp()),
+    chatThread(new QThread())
 {
-    w.show();
+    chat->moveToThread(chatThread);
+    connect(chatThread, &QThread::finished, chat, &QObject::deleteLater);
 
-    chat->moveToThread(&chatthread);
-    connect(&chatthread, &QThread::started, chat,&Chat_udp::connectserver);
+    connect(chat, &ChatUdp::messageRecived, window, &MainWindow::onMessageRecvied);
+    connect(window, &MainWindow::sendClicked, chat, &ChatUdp::send);
+    connect(window, &MainWindow::connectClicked, chat, &ChatUdp::connect);
+    connect(window, &MainWindow::disconnectClicked, chat, &ChatUdp::disconnect);
 
-    connect(chat, &Chat_udp::messageRecived,&w, &MainWindow::onMessageRecvied);
-    connect(&w, &MainWindow::SendClicked, this, &core::onSendClicked);
-    connect(&w, &MainWindow::ConnectClicked, this, &core::onConnectClicked);
-    connect(&w, &MainWindow::DisconnectClicked, this, &core::onDisconnectClicked);
-
-    connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::terminate);
-    //connect(&w, &MainWindow::DisconnectClicked, &chatthread, &QThread::deleteLater);
+    chatThread->start();
+    window->show();
 }
 
-void core::onSendClicked(QString text)
+Core::~Core()
 {
-    chat->Process(text);
+    chatThread->quit();
+    chatThread->wait();
 }
-void core::onConnectClicked(int local_port_, int sent_port_)
-{
-    chat->local_port = local_port_;
-    chat->sent_port = sent_port_;
-    chatthread.start();
-   // chat->connectserver();
 
-}
-void core::onDisconnectClicked(int i)
-{
-    //chatthread.quit();
-   // chatthread.wait();
-    chat->disc();
-   // thread->quit();
-    //thread->finished();
-}

@@ -17,28 +17,22 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 public slots:
     void onMessageRecvied(QString message);
+
 private slots:
-    void on_Send_clicked();
+    void onSendClicked();
+    void onConnectClicked();
 
-    void on_pushButton_disconnect_clicked();
-
-    void on_pushButton_connect_clicked();
 signals:
-
-    void SendClicked(QString text);
-
-    void ConnectClicked(int local_port_, int sent_port_);
-
-    void DisconnectClicked(int i);
+    void sendClicked(QString text);
+    void connectClicked(int local_port_, int sent_port_);
+    void disconnectClicked();
 
 private:
-    int local_port;
-    int sent_port;
+    int _localPort;
+    int _sentPort;
     Ui::MainWindow *ui;
-    QString nickname;
-    QUdpSocket udpSocket;
-    int clicked;
 };
 #endif // MAINWINDOW_H

@@ -6,29 +6,28 @@
 #include <QNetworkDatagram>
 #include <QByteArray>
 
-class Chat_udp : public QObject
+class ChatUdp : public QObject
 {
     Q_OBJECT
 public:
-    Chat_udp();
-    QString Readmessage;
-
-    int local_port;
-    int sent_port;
-    void disc();
+    ChatUdp();
 
 public slots:
-    void Process(QString value);
-    void Send(QString value);
-    void ReadPendingDatagrams();
-    void connectserver();
+    void disconnect();
+    void send(QString message);
+    void connect(int srcPort, int destPort);
+
+private slots:
+    void readPendingDatagrams();
+
 signals:
     void messageRecived(QString message);
 
 private:
-    QString nickname;
-    QUdpSocket udpSocket;
-
+    int _srcPort;
+    int _destPort;
+    QString _nickname;
+    QUdpSocket _udpSocket;
 };
 
 #endif // CHAT_UDP_H

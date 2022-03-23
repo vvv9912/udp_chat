@@ -5,23 +5,19 @@
 #include "chat_udp.h"
 #include "mainwindow.h"
 #include "QThread"
-class core : public QObject
+
+class Core : public QObject
 {
     Q_OBJECT
-    QThread chatthread;
+
 public:
-    explicit core(QObject *parent = nullptr);
-     //   Chat_udp chat;
-        MainWindow w;
-        Chat_udp *chat = new Chat_udp;
+    explicit Core(QObject *parent = nullptr);
+    ~Core();
 
-
-public slots:
-       void onSendClicked(QString text);
-       void onConnectClicked(int local_port_, int sent_port_);
-       void onDisconnectClicked(int i);
-signals:
-
+private:
+    MainWindow *window;
+    ChatUdp *chat;
+    QThread *chatThread;
 };
 
 #endif // CORE_H

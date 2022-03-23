@@ -7,8 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-
     QApplication a(argc, argv);
-    core c;
+    Core c;
     return a.exec();
 }
